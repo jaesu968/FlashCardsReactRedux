@@ -1,80 +1,66 @@
-# Getting Started with Create React App
+# Flashcards — React + Redux Toolkit
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a flashcard/quiz app built with React (v18), React Router, and Redux Toolkit. It demonstrates structuring application state with slices for topics, quizzes, and cards, and provides UI for creating and taking simple quizzes.
 
-## Available Scripts
+## Features (implemented)
+- Create and list Topics (with icon selection) — `src/features/topics/*` and `src/components/NewTopicForm.js`
+- Create Quizzes for a Topic and add multiple Cards to a Quiz — `src/features/quizzes/*` and `src/components/NewQuizForm.js`
+- Persist quizzes/topics/cards in Redux store (in-memory) via three slices: `topics`, `quizzes`, `cards` — `src/features/*/ *Slice.js`
+- View a Topic to see its Quizzes, and view a Quiz to see its Cards — routes configured in `src/app/App.js` and `src/app/routes.js`
+- Flip a flashcard to see front/back content (simple click toggle) — `src/features/cards/Card.js`
 
-In the project directory, you can run:
+## How it works (implementation notes)
+- State management: uses Redux Toolkit `createSlice` for `topics`, `quizzes`, and `cards`.
+	- `topics` stores topic objects keyed by id and keeps a `quizIds` array for each topic.
+	- `quizzes` stores quizzes keyed by id and each quiz contains `cardIds` referencing cards.
+	- `cards` stores individual card objects keyed by id with `front` and `back` strings.
+- Creating a quiz: the `NewQuizForm` component creates card entries in the `cards` slice, collects their IDs, then creates a quiz in the `quizzes` slice and links it to a topic via `topicId`.
+- Navigation: React Router v6 is used to expose routes for listing and creating topics/quizzes and for viewing specific topic/quiz pages.
 
-### `npm start`
+## Tech stack
+- React 18
+- Redux Toolkit
+- react-redux
+- react-router-dom v6
+- uuid (for generating ids)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project structure (relevant files)
+- `src/app/store.js` — Redux store configuration
+- `src/app/App.js` — Routes and app layout
+- `src/features/topics/` — Topics list, topic detail, and `topicsSlice`
+- `src/features/quizzes/` — Quizzes list, quiz detail, and `quizzesSlice`
+- `src/features/cards/` — Card component and `cardsSlice`
+- `src/components/NewTopicForm.js`, `src/components/NewQuizForm.js` — forms for creating entities
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Local setup
+1. Install dependencies
+```bash
+npm install
+```
+2. Start the dev server
+```bash
+npm start
+```
+3. Open the app
+	- Visit `http://localhost:3000` (note: routes are available at `/topics` and `/quizzes`)
 
-### `npm test`
+Other scripts from `package.json`:
+- `npm test` — run tests
+- `npm run build` — build for production
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Notes & possible next steps
+- Persistence: currently data lives only in the Redux store (in-memory). Add localStorage persistence or a backend to persist topics/quizzes/cards across reloads.
+- Edits & deletes: UI supports creating topics/quizzes/cards but does not include editing or deleting items — consider adding CRUD operations.
+- UI polish: add better styling, animations for flipping cards, and validation/error handling in forms.
+- Tests: add unit and integration tests for slices and major components.
 
-### `npm run build`
+## Where to look in code
+- See `src/features/*` for most business logic and `src/components/*` for input forms.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+If you'd like, I can:
+- add screenshots or GIFs to this README;
+- wire up localStorage persistence;
+- or add simple unit tests for one of the slices — tell me which next.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-## Flashcard Project 
-## Goals: 
-*In this project, you will practice using Redux and Redux Toolkit to manage the complex state of a flashcard-style quiz app. Users will be able to create their own topics, quizzes for those topics, and flashcards for those quizzes. Users will also be able to interact with their quizzes by flipping flashcards over.
-
-## App Organization: 
-* 3 slices: one for topics, one for quizzes, one for cards.
-* Each slice’s state should include an object storing all the topics/quizzes/cards keyed by their id. This will allow you to quickly retrieve an object’s information whenever you need to look it up.
-* Each individual quiz will have a topicId value corresponding to an individual topic in state.
-* Similarly, each topic which will have a quizIds array corresponding to the associated quizzes in state.
+---
+_README updated to summarize implemented features, code locations, and next steps._
