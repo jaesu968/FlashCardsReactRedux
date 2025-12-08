@@ -1,5 +1,6 @@
 // topicsSlice.js 
 import { createSlice } from '@reduxjs/toolkit';
+import { addQuiz } from '../quizzes/quizzesSlice'; 
 
 // initial state consisting of an object that includes one propety called "topics" 
 // which corresponds to an empty object, the inner topics object will 
@@ -25,7 +26,7 @@ export const topicsSlice = createSlice({
         topics: {},
     },
     reducers: {
-        // reducer functions for adding and removing topics
+        // action reducer functions for adding a topic
         addTopic(state, action) {
             state.topics[action.payload.id] = {
                 ...action.payload, 
@@ -34,8 +35,17 @@ export const topicsSlice = createSlice({
                 icon: action.payload.icon, 
                 quizIds: [],
             }
-        }, 
-    }, 
+        },
+    },
+    extraReducers: {
+       // listen to the addQuiz action from quizzesSlice
+       // and update the corresponding topic's quizIds array
+        [addQuiz]: (state, action) => {
+            if(state.topics[action.payload.topicId]) {
+                state.topics[action.payload.topicId].quizIds.push(action.payload.id);
+            }
+        }
+    }
 })
 
 export const selectTopics = (state) => state.topics.topics; 

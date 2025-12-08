@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { selectTopics } from "./topicsSlice";
 
 export default function Topics() {
-  const topics = useSelector(selectTopics); // replace this with a call to your selector to select all the topics in state
+  const topics = useSelector(selectTopics); // useSelector hook call to your selector helps you get data out of the store and into this component
 
   return (
     <section className="center">
