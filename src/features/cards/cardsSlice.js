@@ -14,13 +14,13 @@ export const cardsSlice = createSlice({
                 id: action.payload.id, 
                 front: action.payload.front,
                 back: action.payload.back,
-            },
+            };
         },
     },
 }); 
 
 // export actions, selectors, and reducer from the slice
 // include a selector to return a card with a given ID
-export const selectCards = (id) => (state) => state.cards.cards[id];
+export const selectCardById = (id) => (state) => state.cards.cards[id];
 export const { addCard } = cardsSlice.actions;
 export default cardsSlice.reducer;
